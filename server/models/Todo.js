@@ -12,11 +12,15 @@ const Todo = function (Sequelize, DataTypes) {
         allowNull: false,
       },
       description: {
-        type: DataTypes.text,
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       status: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      due_dt: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
     },

@@ -3,6 +3,7 @@ create table todo (
     title varchar(100) not null,
     description text not null,
     status tinyint(1) not null default 0,
+    expr_dt datetime not null,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp on update current_timestamp
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
