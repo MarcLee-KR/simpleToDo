@@ -73,38 +73,42 @@ router.get("/todo/:id", (req, res) => {
 });
 
 // PATCH /todo/:id
-router.patch("/todo/:id", (req, res) => {
-  // error handling
-  if (
-    req.params.id == 0 ||
-    req.params.id == null ||
-    isNaN(req.params.id) ||
-    req.params.id < 0
-  ) {
-    return res.status(400).send({
-      message: "Id cannot be 0 or null or NaN or negative",
-    });
-  }
-
-  Todo.update(
-    {
-      title: req.body.title,
-      description: req.body.description,
-      status: req.body.status,
-      due_date: req.body.due_date,
-    },
-    {
-      where: {
-        id: req.params.id,
-      },
+router.patch("/todo/:id", async (req, res) => {
+  try {
+    // error handling
+    if (
+      req.params.id == 0 ||
+      req.params.id == null ||
+      isNaN(req.params.id) ||
+      req.params.id < 0
+    ) {
+      return res.status(400).send({
+        message: "Id cannot be 0 or null or NaN or negative",
+      });
     }
-  )
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
+
+    let [isUpdated] = await Todo.update(
+      {
+        title: req.body.title,
+        description: req.body.description,
+        status: req.body.status,
+        due_date: req.body.due_date,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    if (!isUpdated) {
+      return res.status(400).send({
+        message: "Id not found",
+      });
+    }
+    res.send({ message: "Updated successfully" });
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 // DELETE /todo/:id
